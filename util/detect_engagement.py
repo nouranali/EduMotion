@@ -1,5 +1,3 @@
-# Program constructs Concentration Index and returns a classification of engagement.
-
 import cv2
 import numpy as np
 import dlib
@@ -9,7 +7,7 @@ from keras.models import load_model
 
 class analysis:
 
-    # Initialise models
+    # Initialise models: face detection, emotion and eye gaze
     def __init__(self):
         self.emotion_model = load_model('./util/model/emotion_recognition.h5')
         self.detector = dlib.get_frontal_face_detector()
@@ -117,15 +115,9 @@ class analysis:
             benchmark.append([gaze_ratio_lr, gaze_ratio_ud, left_eye_ratio])
             emotion = self.detect_emotion(gray)
             ci = self.gen_concentration_index()
-            # cv2.putText(frame, "x: "+str(gaze_ratio_lr),
-            #             (50, 100), font, 2, (0, 0, 255), 3)
-            # cv2.putText(frame, "y: "+str(gaze_ratio_ud),
-            #             (50, 150), font, 2, (0, 0, 255), 3)
-            # cv2.putText(frame, "Eye Size: "+str(left_eye_ratio),
-            #             (50, 200), font, 2, (0, 0, 255), 3)
+            #emotion dictionary mapping
             emotions = {0: 'Angry', 1: 'Fear', 2: 'Happy',
                         3: 'Sad', 4: 'Surprised', 5: 'Neutral'}
-            # if emotion:
             cv2.putText(frame, emotions[self.emotion],
                         (50, 150), font, 2, (0, 0, 255), 3)
             cv2.putText(frame, ci,
@@ -135,14 +127,14 @@ class analysis:
             self.size = left_eye_ratio
         return frame
 
-# Function for detecting emotion
+# Function that detects emotion
 
     def detect_emotion(self, gray):
-        # Dictionary for emotion recognition model output and emotions
+          #emotions dictionary mapping
         emotions = {0: 'Angry', 1: 'Fear', 2: 'Happy',
                     3: 'Sad', 4: 'Surprised', 5: 'Neutral'}
 
-        # Face detection takes approx 0.07 seconds
+        # face detection
         faces = self.faceCascade.detectMultiScale(
             gray,
             scaleFactor=1.1,
@@ -157,13 +149,12 @@ class analysis:
                 test_image = np.multiply(test_image, 1.0 / 255.0)
 
                 # Probablities of all classes
-                # Finding class probability takes approx 0.05 seconds
                 if self.frame_count % 5 == 0:
                     probab = self.emotion_model.predict(test_image)[0] * 100
-                    #print("--- %s seconds ---" % (time.time() - start_time))
+     
 
                     # Finding label from probabilities
-                    # Class having highest probability considered output label
+                    # predict emotion
                     label = np.argmax(probab)
                     probab_predicted = int(probab[label])
                     predicted_emotion = emotions[label]
@@ -172,7 +163,7 @@ class analysis:
 
         self.frame_count += 1
 
-        # # 	Weights from Sharma et.al. (2019)
+        # # 	Weights from Sharma et.al. (2019)  paper linked in readme.
         # Neutral	0.9
         # Happy 	0.6
         # Surprised	0.6
@@ -187,15 +178,6 @@ class analysis:
         emotionweights = {0: 0.25, 1: 0.3, 2: 0.6,
                           3: 0.3, 4: 0.6, 5: 0.9}
 
-
-# 	      Open Semi Close
-# Centre	5	1.5	0
-# Upright	2	1.5	0
-# Upleft	2	1.5	0
-# Right	    2	1.5	0
-# Left	    2	1.5	0
-# Downright	2	1.5	0
-# Downleft	2	1.5	0
         gaze_weights = 0
 
         if self.size < 0.2:
