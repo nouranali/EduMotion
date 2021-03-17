@@ -12,4 +12,6 @@
 
 
 ## Live demo
-![video](matser/demo/demo.mp4)
+
+![demo](https://user-images.githubusercontent.com/35102830/111544255-dab63200-877c-11eb-86d3-cad5432910cd.gif)
+
