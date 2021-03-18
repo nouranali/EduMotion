@@ -4,11 +4,14 @@
 ## Implemented using python,Tensorflow and OpenCV, the emotion detection model is done by us and eye tracking is a pretrained model.
 
 ## team members:
-1. Nouran Ali
-2. Zahraa Shehab eldin
-3. Mohamed Zanaty
-4. Macdonald Chirara
-5. Elle Michelle "Mentor"
+1. Nouran Ali - coding
+2. Zahraa Shehab eldin - market research and resources
+3. Mohamed Zanaty - designer and presentation scripting
+4. Macdonald Chirara - UI designer and market analysis
+5. Elle Michelle - Mentor and project manager
+## References:
+https://pysource.com/2019/01/07/eye-detection-gaze-controlled-keyboard-with-python-and-opencv-p-1/
+https://arxiv.org/pdf/1909.12913v4.pdf
 
 
 ## Live demo
